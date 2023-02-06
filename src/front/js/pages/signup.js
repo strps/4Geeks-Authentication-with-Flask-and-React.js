@@ -10,19 +10,20 @@ export const Signup = props => {
 	const [email, setEmail] = useState()
 	const [password, setPassword] = useState()
 	const [signedup, setSignedup] = useState(false)
+	const [msg, setMsg] = useState([])
 
-	// const navigate = useNavigate()
-	// useEffect(()=>{
-	// 	if(store.accessToken){
-	// 		navigate('/profile')
-	// 	}
 
-	// },[store.accessToken])
 
 	async function submitSignup(e) {
 		e.preventDefault()
 		let resp = await actions.signup(email, password)
-		setSignedup(resp)
+		console.log(resp)
+		if(resp === 'email already in use'){
+			setMsg(<p className='text-danger'>This email already exist, please try another one.</p>)
+			return
+		}else {
+			setSignedup(true)
+		}
 	}
 
 	return (
@@ -38,6 +39,7 @@ export const Signup = props => {
 					<div className="mb-3">
 						<label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
 						<input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={(e) => setEmail(e.target.value)} />
+						{msg}
 						<div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
 					</div>
 					<div className="mb-3">

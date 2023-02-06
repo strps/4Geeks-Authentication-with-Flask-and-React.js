@@ -86,10 +86,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({ email, password })
 				})
 				if (!resp.ok) {
-					console.error("therea was an error: "+resp.statusText)
-					return false
+					console.error("There was an error: " + resp.statusText)
+					const data = await resp.json()
+					console.log(data)
+					return data.msg
 				}
 				const data = await resp.json()
+				console.log(data)
 				return true
 			}
 

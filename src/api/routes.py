@@ -6,6 +6,7 @@ from api.models import db, User, BlockedTokens
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token, create_refresh_token, get_jwt
 from flask_bcrypt import Bcrypt
+from sqlalchemy.exc import IntegrityError
 
 api = Blueprint('api', __name__)
 app = Flask(__name__)
@@ -30,8 +31,15 @@ def new_user():
     print(email)
     user = User(email=email, password = password, is_active = True)
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({'msg':"email already in use"}), 500
     return jsonify({'msg':"user created"}), 200
+
+#    sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "user_email_key"
+#DETAIL:  Key (email)=(user2@email.com) already exists.
 
 @api.route('/login', methods = ['POST'])
 def login():

@@ -12,7 +12,7 @@ export const Navbar = () => {
 					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
 				</Link>
 				<div className="ml-auto">
-					<Link className="ml-1" to={store.accessToken?"/profile":'/signup'}>
+					<Link className="mr-1" to={store.accessToken?"/profile":'/signup'}>
 						<button className="btn btn-primary">{store.accessToken?"Profile":'Sign up'}</button>
 					</Link>
 					<Link to={store.accessToken?"/logout":'/login'}>
